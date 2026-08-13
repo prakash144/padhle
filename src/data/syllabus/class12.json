@@ -1,0 +1,200 @@
+[
+  {
+    "name": "Physics",
+    "color": "#27834A",
+    "chapters": [
+      {
+        "name": "Electric Charges and Fields",
+        "weightage": 7
+      },
+      {
+        "name": "Electrostatic Potential and Capacitance",
+        "weightage": 6
+      },
+      {
+        "name": "Current Electricity",
+        "weightage": 8
+      },
+      {
+        "name": "Moving Charges and Magnetism",
+        "weightage": 6
+      },
+      {
+        "name": "Electromagnetic Induction",
+        "weightage": 6
+      },
+      {
+        "name": "Alternating Current",
+        "weightage": 6
+      },
+      {
+        "name": "Ray Optics and Optical Instruments",
+        "weightage": 7
+      },
+      {
+        "name": "Wave Optics",
+        "weightage": 5
+      },
+      {
+        "name": "Dual Nature of Radiation and Matter",
+        "weightage": 5
+      },
+      {
+        "name": "Atoms and Nuclei",
+        "weightage": 5
+      },
+      {
+        "name": "Semiconductor Electronics",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Chemistry",
+    "color": "#F0A94B",
+    "chapters": [
+      {
+        "name": "Solutions",
+        "weightage": 6
+      },
+      {
+        "name": "Electrochemistry",
+        "weightage": 6
+      },
+      {
+        "name": "Chemical Kinetics",
+        "weightage": 6
+      },
+      {
+        "name": "d and f Block Elements",
+        "weightage": 6
+      },
+      {
+        "name": "Coordination Compounds",
+        "weightage": 7
+      },
+      {
+        "name": "Haloalkanes and Haloarenes",
+        "weightage": 5
+      },
+      {
+        "name": "Alcohols, Phenols and Ethers",
+        "weightage": 6
+      },
+      {
+        "name": "Aldehydes, Ketones and Carboxylic Acids",
+        "weightage": 7
+      },
+      {
+        "name": "Amines",
+        "weightage": 5
+      },
+      {
+        "name": "Biomolecules",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Mathematics",
+    "color": "#C99618",
+    "chapters": [
+      {
+        "name": "Relations and Functions",
+        "weightage": 5
+      },
+      {
+        "name": "Inverse Trigonometric Functions",
+        "weightage": 5
+      },
+      {
+        "name": "Matrices",
+        "weightage": 6
+      },
+      {
+        "name": "Determinants",
+        "weightage": 6
+      },
+      {
+        "name": "Continuity and Differentiability",
+        "weightage": 7
+      },
+      {
+        "name": "Application of Derivatives",
+        "weightage": 7
+      },
+      {
+        "name": "Integrals",
+        "weightage": 8
+      },
+      {
+        "name": "Application of Integrals",
+        "weightage": 6
+      },
+      {
+        "name": "Differential Equations",
+        "weightage": 6
+      },
+      {
+        "name": "Vector Algebra",
+        "weightage": 5
+      },
+      {
+        "name": "Three Dimensional Geometry",
+        "weightage": 6
+      },
+      {
+        "name": "Probability",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Biology",
+    "color": "#3A9D5D",
+    "chapters": [
+      {
+        "name": "Reproduction in Organisms",
+        "weightage": 5
+      },
+      {
+        "name": "Genetics and Evolution",
+        "weightage": 7
+      },
+      {
+        "name": "Human Health and Disease",
+        "weightage": 6
+      },
+      {
+        "name": "Biotechnology",
+        "weightage": 6
+      },
+      {
+        "name": "Ecology and Environment",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "English",
+    "color": "#2F7D4A",
+    "chapters": [
+      {
+        "name": "The Last Lesson",
+        "weightage": 3
+      },
+      {
+        "name": "Poetry Section",
+        "weightage": 4
+      },
+      {
+        "name": "Vistas — Supplementary Reader",
+        "weightage": 4
+      },
+      {
+        "name": "Writing Skills",
+        "weightage": 5
+      }
+    ]
+  }
+]

@@ -1,0 +1,150 @@
+[
+  {
+    "name": "Science",
+    "color": "#27834A",
+    "chapters": [
+      {
+        "name": "Chemical Reactions & Equations",
+        "weightage": 7
+      },
+      {
+        "name": "Acids, Bases and Salts",
+        "weightage": 6
+      },
+      {
+        "name": "Metals and Non-metals",
+        "weightage": 7
+      },
+      {
+        "name": "Carbon and its Compounds",
+        "weightage": 7
+      },
+      {
+        "name": "Life Processes",
+        "weightage": 8
+      },
+      {
+        "name": "Control and Coordination",
+        "weightage": 6
+      },
+      {
+        "name": "Heredity and Evolution",
+        "weightage": 6
+      },
+      {
+        "name": "Light — Reflection and Refraction",
+        "weightage": 8
+      },
+      {
+        "name": "Electricity",
+        "weightage": 8
+      },
+      {
+        "name": "Magnetic Effects of Electric Current",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Mathematics",
+    "color": "#C99618",
+    "chapters": [
+      {
+        "name": "Real Numbers",
+        "weightage": 5
+      },
+      {
+        "name": "Polynomials",
+        "weightage": 6
+      },
+      {
+        "name": "Pair of Linear Equations",
+        "weightage": 7
+      },
+      {
+        "name": "Quadratic Equations",
+        "weightage": 7
+      },
+      {
+        "name": "Arithmetic Progressions",
+        "weightage": 6
+      },
+      {
+        "name": "Triangles",
+        "weightage": 7
+      },
+      {
+        "name": "Coordinate Geometry",
+        "weightage": 6
+      },
+      {
+        "name": "Trigonometry",
+        "weightage": 7
+      },
+      {
+        "name": "Circles",
+        "weightage": 5
+      },
+      {
+        "name": "Statistics & Probability",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Social Science",
+    "color": "#F0A94B",
+    "chapters": [
+      {
+        "name": "Nationalism in India",
+        "weightage": 6
+      },
+      {
+        "name": "The Making of a Global World",
+        "weightage": 5
+      },
+      {
+        "name": "Resources and Development",
+        "weightage": 5
+      },
+      {
+        "name": "Power Sharing",
+        "weightage": 5
+      },
+      {
+        "name": "Federalism",
+        "weightage": 5
+      },
+      {
+        "name": "Development",
+        "weightage": 5
+      },
+      {
+        "name": "Money and Credit",
+        "weightage": 5
+      }
+    ]
+  },
+  {
+    "name": "English",
+    "color": "#3A9D5D",
+    "chapters": [
+      {
+        "name": "A Letter to God",
+        "weightage": 4
+      },
+      {
+        "name": "Nelson Mandela: Long Walk to Freedom",
+        "weightage": 4
+      },
+      {
+        "name": "Two Stories about Flying",
+        "weightage": 4
+      },
+      {
+        "name": "Grammar & Writing Skills",
+        "weightage": 6
+      }
+    ]
+  }
+]

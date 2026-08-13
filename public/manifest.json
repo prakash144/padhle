@@ -1,0 +1,13 @@
+{
+  "name": "पdhle — Study smarter. Every day.",
+  "short_name": "पdhle",
+  "description": "पdhle helps you plan, focus, practice, and improve for Boards, JEE, and NEET.",
+  "start_url": "/padhle/",
+  "scope": "/padhle/",
+  "display": "standalone",
+  "background_color": "#F7F7FB",
+  "theme_color": "#176B4D",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

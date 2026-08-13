@@ -1,0 +1,130 @@
+import type { Config } from "tailwindcss";
+
+export default {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ["Inter", "Plus Jakarta Sans", "sans-serif"],
+        sans: ["Inter", "Plus Jakarta Sans", "sans-serif"],
+        numeric: ["Space Grotesk", "Inter", "sans-serif"],
+        devanagari: ["Hind", "sans-serif"],
+      },
+      colors: {
+        brand: {
+          400: "hsl(var(--brand-400) / <alpha-value>)",
+          500: "hsl(var(--brand-500) / <alpha-value>)",
+          600: "hsl(var(--brand-600) / <alpha-value>)",
+          700: "hsl(var(--brand-700) / <alpha-value>)",
+          800: "hsl(var(--brand-800) / <alpha-value>)",
+        },
+        primary: "hsl(var(--primary) / <alpha-value>)",
+        "primary-hover": "hsl(var(--primary-hover) / <alpha-value>)",
+        "primary-foreground": "hsl(var(--primary-foreground) / <alpha-value>)",
+        bg: "hsl(var(--bg) / <alpha-value>)",
+        surface: "hsl(var(--surface) / <alpha-value>)",
+        "surface-2": "hsl(var(--surface-2) / <alpha-value>)",
+        "surface-3": "hsl(var(--surface-3) / <alpha-value>)",
+        soft: "hsl(var(--soft) / <alpha-value>)",
+        sidebar: "hsl(var(--sidebar) / <alpha-value>)",
+        "nav-active": "hsl(var(--nav-active) / <alpha-value>)",
+        "nav-active-fg": "hsl(var(--nav-active-fg) / <alpha-value>)",
+        border: "hsl(var(--border) / <alpha-value>)",
+        "border-strong": "hsl(var(--border-strong) / <alpha-value>)",
+        "text-primary": "hsl(var(--text-primary) / <alpha-value>)",
+        "text-secondary": "hsl(var(--text-secondary) / <alpha-value>)",
+        "text-muted": "hsl(var(--text-muted) / <alpha-value>)",
+        exam: {
+          jee: "hsl(var(--exam-jee) / <alpha-value>)",
+          neet: "hsl(var(--exam-neet) / <alpha-value>)",
+          boards: "hsl(var(--exam-boards) / <alpha-value>)",
+        },
+        accent: "hsl(var(--accent) / <alpha-value>)",
+        forest: {
+          seed: "hsl(var(--forest-seed) / <alpha-value>)",
+          sprout: "hsl(var(--forest-sprout) / <alpha-value>)",
+          young: "hsl(var(--forest-young) / <alpha-value>)",
+          mature: "hsl(var(--forest-mature) / <alpha-value>)",
+          great: "hsl(var(--forest-great) / <alpha-value>)",
+          milestone: "hsl(var(--forest-milestone) / <alpha-value>)",
+        },
+        mastery: {
+          "not-started": "hsl(var(--mastery-not-started) / <alpha-value>)",
+          learning: "hsl(var(--mastery-learning) / <alpha-value>)",
+          practiced: "hsl(var(--mastery-practiced) / <alpha-value>)",
+          confident: "hsl(var(--mastery-confident) / <alpha-value>)",
+          mastered: "hsl(var(--mastery-mastered) / <alpha-value>)",
+        },
+        success: "hsl(var(--success) / <alpha-value>)",
+        warning: "hsl(var(--warning) / <alpha-value>)",
+        danger: "hsl(var(--danger) / <alpha-value>)",
+        info: "hsl(var(--info) / <alpha-value>)",
+        achievement: "hsl(var(--achievement) / <alpha-value>)",
+        streak: "hsl(var(--streak) / <alpha-value>)",
+        ai: "hsl(var(--ai) / <alpha-value>)",
+        "focus-dark": "hsl(var(--focus-dark) / <alpha-value>)",
+        "focus-teal": "hsl(var(--focus-teal) / <alpha-value>)",
+      },
+      borderRadius: {
+        sm: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+        "2xl": "20px",
+      },
+      boxShadow: {
+        e1: "0 1px 2px rgba(20, 33, 28, 0.04), 0 1px 3px rgba(20, 33, 28, 0.03)",
+        e2: "0 2px 6px rgba(20, 33, 28, 0.05), 0 8px 20px rgba(20, 33, 28, 0.05)",
+        e3: "0 8px 24px rgba(20, 33, 28, 0.08), 0 24px 48px rgba(20, 33, 28, 0.08)",
+        ring: "0 0 0 1px hsl(var(--border) / 1)",
+      },
+      backgroundImage: {
+        "brand-gradient": "linear-gradient(135deg, hsl(var(--brand-600) / 1) 0%, hsl(var(--brand-400) / 1) 100%)",
+        "brand-gradient-soft":
+          "linear-gradient(135deg, hsl(var(--brand-500) / 0.1) 0%, hsl(var(--brand-600) / 0.06) 100%)",
+      },
+      transitionDuration: {
+        micro: "120ms",
+        standard: "220ms",
+        hero: "320ms",
+      },
+      keyframes: {
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "scale-in": {
+          "0%": { opacity: "0", scale: ".96" },
+          "100%": { opacity: "1", scale: "1" },
+        },
+        "check-pop": {
+          "0%": { transform: "scale(1)" },
+          "40%": { transform: "scale(1.25)" },
+          "100%": { transform: "scale(1)" },
+        },
+        shimmer: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: ".55" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 280ms cubic-bezier(.22,.61,.36,1) both",
+        "fade-in": "fade-in 220ms ease-out both",
+        "scale-in": "scale-in 200ms cubic-bezier(.22,.61,.36,1) both",
+        "check-pop": "check-pop 340ms cubic-bezier(.22,.61,.36,1)",
+        shimmer: "shimmer 1.2s cubic-bezier(.33,0,.2,1) infinite",
+        "pulse-soft": "pulse-soft 2.4s ease-in-out infinite",
+      },
+    },
+  },
+  plugins: [],
+} satisfies Config;

@@ -1,0 +1,202 @@
+[
+  {
+    "name": "Physics",
+    "color": "#27834A",
+    "chapters": [
+      {
+        "name": "Kinematics",
+        "weightage": 6
+      },
+      {
+        "name": "Laws of Motion",
+        "weightage": 5
+      },
+      {
+        "name": "Work, Energy and Power",
+        "weightage": 5
+      },
+      {
+        "name": "Rotational Motion",
+        "weightage": 5
+      },
+      {
+        "name": "Gravitation",
+        "weightage": 4
+      },
+      {
+        "name": "Thermodynamics",
+        "weightage": 5
+      },
+      {
+        "name": "Oscillations and Waves",
+        "weightage": 5
+      },
+      {
+        "name": "Electrostatics",
+        "weightage": 6
+      },
+      {
+        "name": "Current Electricity",
+        "weightage": 6
+      },
+      {
+        "name": "Magnetism & EMI",
+        "weightage": 5
+      },
+      {
+        "name": "Ray & Wave Optics",
+        "weightage": 6
+      },
+      {
+        "name": "Modern Physics",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Chemistry",
+    "color": "#F0A94B",
+    "chapters": [
+      {
+        "name": "Mole Concept",
+        "weightage": 5
+      },
+      {
+        "name": "Chemical Bonding",
+        "weightage": 6
+      },
+      {
+        "name": "States of Matter & Thermodynamics",
+        "weightage": 5
+      },
+      {
+        "name": "Equilibrium",
+        "weightage": 6
+      },
+      {
+        "name": "Redox & Electrochemistry",
+        "weightage": 5
+      },
+      {
+        "name": "p-Block Elements",
+        "weightage": 6
+      },
+      {
+        "name": "d and f Block Elements",
+        "weightage": 5
+      },
+      {
+        "name": "Coordination Compounds",
+        "weightage": 5
+      },
+      {
+        "name": "GOC & Isomerism",
+        "weightage": 6
+      },
+      {
+        "name": "Hydrocarbons",
+        "weightage": 5
+      },
+      {
+        "name": "Biomolecules",
+        "weightage": 6
+      },
+      {
+        "name": "Aldehydes, Ketones & Carboxylic Acids",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Botany",
+    "color": "#3A9D5D",
+    "chapters": [
+      {
+        "name": "Plant Kingdom",
+        "weightage": 5
+      },
+      {
+        "name": "Morphology of Flowering Plants",
+        "weightage": 5
+      },
+      {
+        "name": "Cell — The Unit of Life",
+        "weightage": 6
+      },
+      {
+        "name": "Cell Cycle and Cell Division",
+        "weightage": 5
+      },
+      {
+        "name": "Photosynthesis",
+        "weightage": 6
+      },
+      {
+        "name": "Plant Growth and Development",
+        "weightage": 4
+      },
+      {
+        "name": "Sexual Reproduction in Flowering Plants",
+        "weightage": 6
+      },
+      {
+        "name": "Molecular Basis of Inheritance",
+        "weightage": 7
+      },
+      {
+        "name": "Principles of Inheritance and Variation",
+        "weightage": 7
+      },
+      {
+        "name": "Ecosystem",
+        "weightage": 5
+      }
+    ]
+  },
+  {
+    "name": "Zoology",
+    "color": "#2F7D4A",
+    "chapters": [
+      {
+        "name": "Animal Kingdom",
+        "weightage": 6
+      },
+      {
+        "name": "Structural Organisation in Animals",
+        "weightage": 4
+      },
+      {
+        "name": "Digestion and Absorption",
+        "weightage": 5
+      },
+      {
+        "name": "Breathing and Exchange of Gases",
+        "weightage": 5
+      },
+      {
+        "name": "Body Fluids and Circulation",
+        "weightage": 5
+      },
+      {
+        "name": "Neural Control and Coordination",
+        "weightage": 5
+      },
+      {
+        "name": "Chemical Coordination and Integration",
+        "weightage": 5
+      },
+      {
+        "name": "Human Reproduction",
+        "weightage": 6
+      },
+      {
+        "name": "Human Health and Disease",
+        "weightage": 6
+      },
+      {
+        "name": "Evolution",
+        "weightage": 5
+      }
+    ]
+  }
+]

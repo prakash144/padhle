@@ -1,0 +1,196 @@
+[
+  {
+    "name": "Physics",
+    "color": "#27834A",
+    "chapters": [
+      {
+        "name": "Units, Dimensions & Vectors",
+        "weightage": 5
+      },
+      {
+        "name": "Kinematics",
+        "weightage": 6
+      },
+      {
+        "name": "Laws of Motion",
+        "weightage": 6
+      },
+      {
+        "name": "Work, Energy and Power",
+        "weightage": 6
+      },
+      {
+        "name": "Rotational Motion",
+        "weightage": 7
+      },
+      {
+        "name": "Gravitation",
+        "weightage": 5
+      },
+      {
+        "name": "Properties of Matter & Fluids",
+        "weightage": 5
+      },
+      {
+        "name": "Thermodynamics & Kinetic Theory",
+        "weightage": 6
+      },
+      {
+        "name": "Oscillations and Waves",
+        "weightage": 6
+      },
+      {
+        "name": "Electrostatics",
+        "weightage": 8
+      },
+      {
+        "name": "Current Electricity",
+        "weightage": 7
+      },
+      {
+        "name": "Magnetic Effects & Magnetism",
+        "weightage": 6
+      },
+      {
+        "name": "Electromagnetic Induction & AC",
+        "weightage": 6
+      },
+      {
+        "name": "Ray & Wave Optics",
+        "weightage": 7
+      },
+      {
+        "name": "Modern Physics",
+        "weightage": 6
+      }
+    ]
+  },
+  {
+    "name": "Chemistry",
+    "color": "#F0A94B",
+    "chapters": [
+      {
+        "name": "Mole Concept & Stoichiometry",
+        "weightage": 6
+      },
+      {
+        "name": "Atomic Structure",
+        "weightage": 6
+      },
+      {
+        "name": "Chemical Bonding",
+        "weightage": 7
+      },
+      {
+        "name": "States of Matter & Thermodynamics",
+        "weightage": 6
+      },
+      {
+        "name": "Equilibrium (Chemical & Ionic)",
+        "weightage": 7
+      },
+      {
+        "name": "Redox & Electrochemistry",
+        "weightage": 6
+      },
+      {
+        "name": "Chemical Kinetics",
+        "weightage": 5
+      },
+      {
+        "name": "Periodic Table & Periodicity",
+        "weightage": 5
+      },
+      {
+        "name": "p-Block Elements",
+        "weightage": 6
+      },
+      {
+        "name": "d and f Block Elements",
+        "weightage": 5
+      },
+      {
+        "name": "Coordination Compounds",
+        "weightage": 6
+      },
+      {
+        "name": "GOC & Isomerism",
+        "weightage": 7
+      },
+      {
+        "name": "Hydrocarbons",
+        "weightage": 6
+      },
+      {
+        "name": "Aldehydes, Ketones & Carboxylic Acids",
+        "weightage": 7
+      },
+      {
+        "name": "Biomolecules & Polymers",
+        "weightage": 4
+      }
+    ]
+  },
+  {
+    "name": "Mathematics",
+    "color": "#C99618",
+    "chapters": [
+      {
+        "name": "Quadratic Equations & Complex Numbers",
+        "weightage": 6
+      },
+      {
+        "name": "Sequences and Series",
+        "weightage": 5
+      },
+      {
+        "name": "Permutations & Combinations",
+        "weightage": 6
+      },
+      {
+        "name": "Binomial Theorem",
+        "weightage": 5
+      },
+      {
+        "name": "Matrices and Determinants",
+        "weightage": 6
+      },
+      {
+        "name": "Straight Lines & Circles",
+        "weightage": 6
+      },
+      {
+        "name": "Conic Sections",
+        "weightage": 6
+      },
+      {
+        "name": "Limits, Continuity & Differentiability",
+        "weightage": 6
+      },
+      {
+        "name": "Application of Derivatives",
+        "weightage": 6
+      },
+      {
+        "name": "Integral Calculus",
+        "weightage": 8
+      },
+      {
+        "name": "Differential Equations",
+        "weightage": 5
+      },
+      {
+        "name": "Vectors and 3D Geometry",
+        "weightage": 6
+      },
+      {
+        "name": "Probability",
+        "weightage": 5
+      },
+      {
+        "name": "Trigonometry",
+        "weightage": 5
+      }
+    ]
+  }
+]

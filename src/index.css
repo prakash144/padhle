@@ -1,0 +1,560 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Padhle — "a quiet digital forest for studying."
+ * Centralized semantic design tokens. Everything in the app reads these
+ * variables; no page should reach for raw hex. Light + dark variants are
+ * swapped by the `.dark` class on <html>.
+ */
+:root {
+  color-scheme: light;
+
+  /* brand — the forest-green action/accent scale */
+  --brand-400: 127 57% 61%;
+  --brand-500: 141 49% 36%;
+  --brand-600: 143 54% 33%;
+  --brand-700: 142 56% 27%;
+  --brand-800: 159 65% 25%;
+
+  /* primary actions (buttons, key CTAs) */
+  --primary: 143 54% 33%;
+  --primary-hover: 142 56% 27%;
+  --primary-foreground: 0 0% 100%;
+
+  /* surfaces — "morning forest" */
+  --bg: 105 22% 96%;
+  --surface: 0 0% 100%;
+  --surface-2: 130 20% 94%;
+  --surface-3: 133 20% 91%;
+  --soft: 129 30% 92%;
+  --sidebar: 105 22% 96%;
+
+  --border: 126 17% 88%;
+  --border-strong: 139 16% 81%;
+
+  /* text */
+  --text-primary: 142 19% 11%;
+  --text-secondary: 139 8% 41%;
+  --text-muted: 143 6% 51%;
+
+  /* status */
+  --success: 143 54% 33%;
+  --warning: 43 89% 38%;
+  --danger: 5 53% 49%;
+  --info: 205 71% 39%;
+  --achievement: 43 79% 44%;
+  --streak: 33 76% 45%;
+  --ai: 255 53% 55%;
+
+  /* forest growth — the study-forest identity (seed → mature) */
+  --forest-seed: 145 34% 45%;
+  --forest-sprout: 141 46% 42%;
+  --forest-young: 141 49% 36%;
+  --forest-mature: 143 54% 33%;
+  --forest-great: 159 65% 25%;
+  --forest-milestone: 43 79% 44%;
+
+  /* mastery: not-started muted, weak amber, in-progress green, mastered strong */
+  --mastery-not-started: 157 11% 59%;
+  --mastery-learning: 44 71% 40%;
+  --mastery-practiced: 141 49% 36%;
+  --mastery-confident: 143 54% 33%;
+  --mastery-mastered: 159 65% 25%;
+
+  /* active navigation state */
+  --nav-active: 129 30% 92%;
+  --nav-active-fg: 143 54% 33%;
+
+  /* exam identity accents (functional, subtle) */
+  --exam-jee: 205 71% 39%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+
+  /* current exam accent — swapped by [data-exam] on <html>, defaults to the brand */
+  --accent: var(--brand-600);
+
+  /* immersive focus-timer backdrops (kept dark in both themes on purpose) */
+  --focus-dark: 160 28% 5%;
+  --focus-teal: 157 42% 7%;
+}
+
+[data-exam="jee"] {
+  --accent: var(--exam-jee);
+}
+[data-exam="neet"] {
+  --accent: var(--exam-neet);
+}
+[data-exam="boards"] {
+  --accent: var(--exam-boards);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* brand — midnight forest greens.
+     brand-600 aliases Growth Green so the workhorse accent (`text-brand-600`)
+     stays readable on dark surfaces; brand-700/800 are the deeper green ramp. */
+  --brand-400: 126 65% 69%;
+  --brand-500: 127 57% 61%;
+  --brand-600: 127 57% 61%;
+  --brand-700: 141 46% 42%;
+  --brand-800: 141 45% 34%;
+
+  /* primary actions */
+  --primary: 127 57% 61%;
+  --primary-hover: 126 65% 69%;
+  --primary-foreground: 153 36% 5%;
+
+  /* surfaces — "midnight forest" */
+  --bg: 153 36% 5%;
+  --surface: 150 28% 10%;
+  --surface-2: 152 29% 13%;
+  --surface-3: 151 28% 15%;
+  --soft: 152 39% 14%;
+  --sidebar: 153 31% 7%;
+
+  --border: 150 22% 18%;
+  --border-strong: 151 20% 23%;
+
+  /* text */
+  --text-primary: 135 21% 93%;
+  --text-secondary: 139 9% 65%;
+  --text-muted: 144 6% 47%;
+
+  /* status */
+  --success: 127 57% 61%;
+  --warning: 43 87% 66%;
+  --danger: 4 82% 67%;
+  --info: 202 74% 65%;
+  --achievement: 43 87% 66%;
+  --streak: 34 85% 62%;
+  --ai: 255 92% 76%;
+
+  /* forest growth */
+  --forest-seed: 141 46% 42%;
+  --forest-sprout: 127 57% 61%;
+  --forest-young: 126 65% 69%;
+  --forest-mature: 127 60% 75%;
+  --forest-great: 127 60% 75%;
+  --forest-milestone: 43 87% 66%;
+
+  /* mastery: not-started muted, weak amber, in-progress green, mastered bright */
+  --mastery-not-started: 145 9% 39%;
+  --mastery-learning: 43 87% 66%;
+  --mastery-practiced: 127 57% 61%;
+  --mastery-confident: 141 46% 42%;
+  --mastery-mastered: 126 65% 69%;
+
+  /* active navigation state */
+  --nav-active: 152 39% 14%;
+  --nav-active-fg: 127 57% 61%;
+
+  --exam-jee: 202 74% 65%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+
+  --accent: var(--brand-500);
+}
+
+/*
+ * Color palettes — applied via html[data-palette="…"] (see src/lib/appearance.ts).
+ * Forest is the default (root / .dark above). Each palette overrides the
+ * brand-family tokens (brand, primary, soft, forest growth ramp, exam accents).
+ * Semantic status colors (success/warning/error/achievement) and neutral
+ * surfaces stay consistent across palettes so no combination can become
+ * unreadable.
+ */
+
+html[data-palette="ocean"] {
+  --brand-400: 221 83% 68%;
+  --brand-500: 221 83% 58%;
+  --brand-600: 221 82% 53%;
+  --brand-700: 221 81% 46%;
+  --brand-800: 222 76% 39%;
+  --primary: 221 82% 46%;
+  --primary-hover: 221 81% 41%;
+  --primary-foreground: 0 0% 100%;
+  --soft: 220 55% 94%;
+  --forest-seed: 220 10% 68%;
+  --forest-sprout: 222 28% 60%;
+  --forest-young: 221 42% 52%;
+  --forest-mature: 221 60% 44%;
+  --forest-great: 221 76% 42%;
+  --forest-milestone: 40 80% 54%;
+  --exam-jee: 221 60% 44%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+  --accent: var(--brand-600);
+}
+html[data-palette="ocean"].dark {
+  --brand-400: 221 83% 68%;
+  --brand-500: 221 83% 60%;
+  --brand-600: 221 78% 55%;
+  --brand-700: 221 83% 60%;
+  --brand-800: 221 82% 54%;
+  --primary: 221 83% 60%;
+  --primary-hover: 221 80% 66%;
+  --primary-foreground: 222 60% 8%;
+  --soft: 221 35% 18%;
+  --forest-seed: 220 10% 42%;
+  --forest-sprout: 222 26% 56%;
+  --forest-young: 221 42% 52%;
+  --forest-mature: 221 58% 46%;
+  --forest-great: 221 83% 60%;
+  --forest-milestone: 40 76% 60%;
+  --exam-jee: 221 75% 56%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+  --accent: var(--brand-500);
+}
+
+html[data-palette="indigo"] {
+  --brand-400: 243 75% 68%;
+  --brand-500: 243 75% 58%;
+  --brand-600: 243 75% 54%;
+  --brand-700: 243 70% 46%;
+  --brand-800: 244 70% 40%;
+  --primary: 243 70% 46%;
+  --primary-hover: 243 66% 40%;
+  --primary-foreground: 0 0% 100%;
+  --soft: 243 60% 95%;
+  --forest-seed: 243 10% 68%;
+  --forest-sprout: 244 30% 60%;
+  --forest-young: 243 42% 52%;
+  --forest-mature: 243 55% 45%;
+  --forest-great: 243 68% 42%;
+  --forest-milestone: 40 80% 54%;
+  --exam-jee: 243 55% 45%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+  --accent: var(--brand-600);
+}
+html[data-palette="indigo"].dark {
+  --brand-400: 243 75% 72%;
+  --brand-500: 243 70% 64%;
+  --brand-600: 243 68% 58%;
+  --brand-700: 243 75% 64%;
+  --brand-800: 243 75% 60%;
+  --primary: 243 70% 64%;
+  --primary-hover: 243 62% 70%;
+  --primary-foreground: 243 55% 8%;
+  --soft: 243 40% 20%;
+  --forest-seed: 243 12% 42%;
+  --forest-sprout: 244 28% 56%;
+  --forest-young: 243 40% 52%;
+  --forest-mature: 243 55% 46%;
+  --forest-great: 243 70% 62%;
+  --forest-milestone: 40 76% 60%;
+  --exam-jee: 243 65% 56%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+  --accent: var(--brand-500);
+}
+
+html[data-palette="plum"] {
+  --brand-400: 262 83% 70%;
+  --brand-500: 262 83% 62%;
+  --brand-600: 262 83% 58%;
+  --brand-700: 262 75% 50%;
+  --brand-800: 263 70% 44%;
+  --primary: 262 75% 50%;
+  --primary-hover: 262 70% 44%;
+  --primary-foreground: 0 0% 100%;
+  --soft: 262 60% 95%;
+  --forest-seed: 262 12% 68%;
+  --forest-sprout: 262 30% 60%;
+  --forest-young: 262 42% 52%;
+  --forest-mature: 262 55% 46%;
+  --forest-great: 262 70% 44%;
+  --forest-milestone: 40 80% 54%;
+  --exam-jee: 262 55% 46%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+  --accent: var(--brand-600);
+}
+html[data-palette="plum"].dark {
+  --brand-400: 262 83% 76%;
+  --brand-500: 262 75% 70%;
+  --brand-600: 262 70% 64%;
+  --brand-700: 262 83% 72%;
+  --brand-800: 262 83% 66%;
+  --primary: 262 75% 70%;
+  --primary-hover: 262 65% 76%;
+  --primary-foreground: 262 55% 10%;
+  --soft: 262 40% 22%;
+  --forest-seed: 262 12% 44%;
+  --forest-sprout: 262 28% 58%;
+  --forest-young: 262 40% 54%;
+  --forest-mature: 262 55% 48%;
+  --forest-great: 262 75% 68%;
+  --forest-milestone: 40 76% 60%;
+  --exam-jee: 262 65% 58%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+  --accent: var(--brand-500);
+}
+
+html[data-palette="teal"] {
+  --brand-400: 177 55% 50%;
+  --brand-500: 177 62% 42%;
+  --brand-600: 177 72% 33%;
+  --brand-700: 177 72% 26%;
+  --brand-800: 178 70% 22%;
+  --primary: 177 72% 28%;
+  --primary-hover: 178 72% 24%;
+  --primary-foreground: 0 0% 100%;
+  --soft: 176 45% 93%;
+  --forest-seed: 177 12% 66%;
+  --forest-sprout: 177 30% 58%;
+  --forest-young: 177 42% 50%;
+  --forest-mature: 177 55% 42%;
+  --forest-great: 177 70% 36%;
+  --forest-milestone: 40 80% 54%;
+  --exam-jee: 177 55% 42%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+  --accent: var(--brand-600);
+}
+html[data-palette="teal"].dark {
+  --brand-400: 177 55% 58%;
+  --brand-500: 177 60% 52%;
+  --brand-600: 177 55% 46%;
+  --brand-700: 177 65% 54%;
+  --brand-800: 177 68% 48%;
+  --primary: 177 60% 52%;
+  --primary-hover: 176 50% 58%;
+  --primary-foreground: 178 60% 8%;
+  --soft: 177 30% 18%;
+  --forest-seed: 177 12% 42%;
+  --forest-sprout: 177 28% 54%;
+  --forest-young: 177 40% 50%;
+  --forest-mature: 177 55% 44%;
+  --forest-great: 177 62% 52%;
+  --forest-milestone: 40 76% 60%;
+  --exam-jee: 177 55% 52%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+  --accent: var(--brand-500);
+}
+
+html[data-palette="warm"] {
+  --brand-400: 32 88% 60%;
+  --brand-500: 30 86% 50%;
+  --brand-600: 29 88% 40%;
+  --brand-700: 28 86% 33%;
+  --brand-800: 27 85% 28%;
+  --primary: 29 88% 38%;
+  --primary-hover: 28 86% 32%;
+  --primary-foreground: 0 0% 100%;
+  --soft: 30 65% 94%;
+  --forest-seed: 32 16% 66%;
+  --forest-sprout: 31 35% 58%;
+  --forest-young: 30 50% 50%;
+  --forest-mature: 29 65% 42%;
+  --forest-great: 29 80% 36%;
+  --forest-milestone: 42 65% 53%;
+  --exam-jee: 30 65% 42%;
+  --exam-neet: 162 50% 36%;
+  --exam-boards: 33 63% 45%;
+  --accent: var(--brand-600);
+}
+html[data-palette="warm"].dark {
+  --brand-400: 30 85% 62%;
+  --brand-500: 30 80% 56%;
+  --brand-600: 30 75% 50%;
+  --brand-700: 30 85% 62%;
+  --brand-800: 30 85% 56%;
+  --primary: 30 80% 56%;
+  --primary-hover: 30 70% 62%;
+  --primary-foreground: 30 60% 8%;
+  --soft: 30 35% 20%;
+  --forest-seed: 32 16% 42%;
+  --forest-sprout: 31 35% 56%;
+  --forest-young: 30 50% 50%;
+  --forest-mature: 29 65% 44%;
+  --forest-great: 30 82% 56%;
+  --forest-milestone: 40 76% 60%;
+  --exam-jee: 30 70% 56%;
+  --exam-neet: 158 47% 52%;
+  --exam-boards: 37 71% 63%;
+  --accent: var(--brand-500);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg text-text-primary font-sans antialiased;
+    /* Ambient forest glow: drifts subtly with the student's selected exam.
+       Kept very gentle so it reads as depth, never decoration. */
+    background-image:
+      radial-gradient(1000px 520px at 88% -8%, hsl(var(--accent) / 0.06), transparent 62%),
+      radial-gradient(900px 560px at -14% 108%, hsl(var(--brand-500) / 0.05), transparent 60%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+  .dark body {
+    background-image:
+      radial-gradient(1000px 520px at 88% -8%, hsl(var(--accent) / 0.1), transparent 62%),
+      radial-gradient(900px 560px at -14% 108%, hsl(var(--brand-500) / 0.08), transparent 60%);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-sans;
+    letter-spacing: -0.01em;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    @apply font-numeric;
+  }
+  ::selection {
+    background: hsl(var(--brand-600) / 0.22);
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--brand-600) / 0.6);
+    outline-offset: 2px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border-strong)) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border-strong) / 0.8);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--text-muted) / 0.6);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  /* Highlights the card a header-menu item jumped to (Profile deep-links). */
+  [data-flash="true"] {
+    animation: section-flash 1.6s ease-out;
+  }
+  @keyframes section-flash {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 hsl(var(--brand-600) / 0);
+    }
+    40% {
+      box-shadow: 0 0 0 4px hsl(var(--brand-600) / 0.28);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+  .print-report {
+    display: block !important;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    min-height: 100%;
+    padding: 0;
+    background: #fff;
+    color: #17231c;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-report .print-section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #d6e2db;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-report .print-header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-report table,
+  .print-report tr,
+  .print-report img,
+  .print-report svg {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-report::after {
+    content: "Padhle 🌳 · Generated by Padhle · Page " counter(page);
+    position: fixed;
+    right: 14mm;
+    bottom: 7mm;
+    font-size: 10px;
+    color: #52645a;
+  }
+}
+
+/* Rich-text note body (editor + preview) — keep it small and predictable. */
+.note-body {
+  line-height: 1.6;
+}
+.note-body > * + * {
+  margin-top: 0.5em;
+}
+.note-body h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+.note-body h2 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+.note-body h3 {
+  font-size: 1.05em;
+  font-weight: 600;
+}
+.note-body ul,
+.note-body ol {
+  padding-left: 1.4em;
+}
+.note-body ul {
+  list-style: disc;
+}
+.note-body ol {
+  list-style: decimal;
+}
+.note-body a {
+  color: hsl(var(--brand-600));
+  text-decoration: underline;
+}
+.note-body blockquote {
+  border-left: 3px solid hsl(var(--border-strong));
+  padding-left: 0.75em;
+  color: hsl(var(--text-secondary));
+}

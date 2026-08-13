@@ -1,0 +1,220 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Admin membership is granted manually in the console via /admins/{uid}.
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // A student can grant read-only access to a parent/mentor by adding their
+    // email to `users/{uid}.parents` (see Profile → Parents & mentors, and
+    // src/lib/share.ts). The check runs against the *user* doc, so it works
+    // for the user doc itself and every subcollection below it.
+    function isGrantedParent(uid) {
+      return request.auth != null &&
+        request.auth.token.email in
+          get(/databases/$(database)/documents/users/$(uid)).data.parents;
+    }
+
+    function canReadUserData(uid) {
+      return isOwner(uid) || isAdmin() || isGrantedParent(uid);
+    }
+
+    // Shared write guard: only the owner may write their own data.
+    // NOTE: the Firestore emulator does not implement request.resource.size
+    // (throws "Property size is undefined"), so it was removed; the server
+    // enforces the 1 MiB document cap regardless. Docs are bounded by the
+    // per-collection validators below.
+    function isOwnerWrite(uid) {
+      return isOwner(uid);
+    }
+
+    // A field is only validated "if present" so partial updates (which merge
+    // into the existing doc) and merge-writes can't be rejected for omitting
+    // fields they legitimately don't touch.
+    function isIntOrAbsent(doc, key) {
+      return !(key in doc) || doc[key] is number;
+    }
+    function isStringOrAbsent(doc, key) {
+      return !(key in doc) || doc[key] is string;
+    }
+
+    // ---- collection validators (one per user-facing collection) ----
+
+    function validUserDoc() {
+      return request.resource.data.keys().hasOnly([
+        'displayName', 'email', 'photoURL', 'school', 'grade', 'address', 'stream', 'primaryExamId', 'activeStudyContext', 'timezone',
+        'pomodoroPrefs', 'throughput', 'lastCheckinDate', 'onboardedAt', 'createdAt',
+        'updatedAt', 'xp', 'streakCount', 'longestStreak', 'lastActiveDate', 'badges', 'parents',
+        'appearance', 'prefs', 'academic'
+      ])
+        && isStringOrAbsent(request.resource.data, 'displayName')
+        && isStringOrAbsent(request.resource.data, 'photoURL')
+        && isStringOrAbsent(request.resource.data, 'school')
+        && isStringOrAbsent(request.resource.data, 'grade')
+        && (!('address' in request.resource.data) || request.resource.data.address is map)
+        && isIntOrAbsent(request.resource.data, 'xp')
+        && isIntOrAbsent(request.resource.data, 'streakCount')
+        && isIntOrAbsent(request.resource.data, 'longestStreak')
+        && (!('badges' in request.resource.data) || request.resource.data.badges is list)
+        && (!('parents' in request.resource.data) || request.resource.data.parents is list)
+        && (!('throughput' in request.resource.data) || request.resource.data.throughput is map)
+        && (!('appearance' in request.resource.data) || request.resource.data.appearance is map)
+        && (!('prefs' in request.resource.data) || request.resource.data.prefs is map)
+        && (!('academic' in request.resource.data) || request.resource.data.academic is map);
+    }
+
+    function validTask() {
+      return request.resource.data.status in ["todo", "in_progress", "done", "carried", "dropped"]
+        && request.resource.data.category in ["jee", "board", "school", "pyq", "revision", "mock"]
+        && request.resource.data.title is string
+        && request.resource.data.scheduledDate is string
+        && isIntOrAbsent(request.resource.data, 'estimatedMinutes')
+        && isIntOrAbsent(request.resource.data, 'questionsDone');
+    }
+
+    function validNote() {
+      return request.resource.data.title is string
+        && request.resource.data.html is string
+        && request.resource.data.html.size() <= 200000
+        && request.resource.data.color is string
+        && request.resource.data.pinned is bool
+        && (!('tags' in request.resource.data) || request.resource.data.tags is list);
+    }
+
+    function validCheckin() {
+      return request.resource.data.date is string
+        && (!('top3' in request.resource.data) || request.resource.data.top3 is list)
+        && (!('mood' in request.resource.data) || request.resource.data.mood is number);
+    }
+
+    function validError() {
+      return request.resource.data.errorType in ["concept", "formula", "calc", "silly", "guessed", "time"]
+        && request.resource.data.status in ["open", "reviewed", "resolved"]
+        && request.resource.data.subjectId is string
+        && request.resource.data.whyWrong is string
+        && isStringOrAbsent(request.resource.data, 'reviewDate');
+    }
+
+    function validFocusSession() {
+      return request.resource.data.mode in ["25/5", "50/10", "90/20", "custom"]
+        && request.resource.data.focusMinutes is number
+        && request.resource.data.focusMinutes >= 0
+        && request.resource.data.focusMinutes <= 10080
+        && request.resource.data.plannedMinutes is number
+        && request.resource.data.questionsDone is number
+        && request.resource.data.date is string
+        && request.resource.data.completed is bool;
+    }
+
+    function validMockTest() {
+      return request.resource.data.name is string
+        && request.resource.data.date is string
+        && request.resource.data.examType in ["class10", "class12", "jeeMain", "jeeAdvanced", "neet"]
+        && request.resource.data.totalMarks is number
+        && request.resource.data.maxMarks is number
+        && request.resource.data.attempted is number
+        && request.resource.data.correct is number
+        && request.resource.data.incorrect is number
+        && request.resource.data.unattempted is number
+        && request.resource.data.accuracy is number
+        && request.resource.data.timeSpentMinutes is number
+        && isIntOrAbsent(request.resource.data, 'percentile')
+        && isIntOrAbsent(request.resource.data, 'rank');
+    }
+
+    // Counters are written via merge + increment(), so any (or all) of the
+    // known numeric buckets may be present — but nothing else, preventing
+    // arbitrary fields from being smuggled into a counter doc.
+    function validCounter() {
+      return request.resource.data.keys().hasOnly([
+        'plannedTasks', 'completedTasks', 'focusMinutes', 'questionsDone',
+        'pyqsDone', 'revisionsDone', 'checkinDone', 'mockCount'
+      ]);
+    }
+
+    // ---- users/{uid} and everything beneath it ----
+
+    match /users/{uid} {
+      allow read: if canReadUserData(uid);
+      allow create, update: if isOwnerWrite(uid) && validUserDoc();
+      allow delete: if false; // accounts are not self-deletable through the app
+
+      match /tasks/{taskId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validTask();
+        allow delete: if isOwner(uid); // read-only parents must not delete
+      }
+
+      match /notes/{noteId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validNote();
+        allow delete: if isOwner(uid);
+      }
+
+      match /checkins/{date} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validCheckin();
+        allow delete: if isOwner(uid);
+      }
+
+      match /errors/{errorId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validError();
+        allow delete: if isOwner(uid);
+      }
+
+      match /focusSessions/{sessionId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validFocusSession();
+        allow delete: if isOwner(uid);
+      }
+
+      match /mockTests/{testId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validMockTest();
+        allow delete: if isOwner(uid);
+      }
+
+      match /counters/{bucketId} {
+        allow read: if canReadUserData(uid);
+        allow create, update: if isOwnerWrite(uid) && validCounter();
+        allow delete: if isOwner(uid);
+      }
+
+      // Remaining internal collections (subjects, chapters, sprints,
+      // examGoals, backlog, revisions, reports) are generated by the app (not
+      // free-form user text), so owner-write + parent/admin read suffices.
+      match /{sub=**} {
+        allow read: if canReadUserData(uid);
+        allow write: if isOwnerWrite(uid);
+      }
+    }
+
+    // Admin membership directory: any signed-in user may read their own doc
+    // (so the client can detect admin); admins may list and grant to others.
+    match /admins/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // shared daily quote cache: any signed-in user may read; the first
+    // request of the day may create it; never overwritten or deleted.
+    match /dailyQuote/{date} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
+
+    // deny everything else by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
