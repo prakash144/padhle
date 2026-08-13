@@ -82,25 +82,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      try {
-        await ensureUserDoc(u);
-      } catch (err) {
-        console.error("Failed to ensure user doc", err);
-        setLoading(false);
-        return;
-      }
       // Live subscription (not a one-time get): every batch write elsewhere
       // in the app that touches xp/streak/badges/onboarding shows up here
       // automatically — no manual "refresh" plumbing needed anywhere else.
+      let settled = false;
+      const settle = () => {
+        if (settled) return;
+        settled = true;
+        setLoading(false);
+      };
+
       unsubDoc = onSnapshot(doc(db, "users", u.uid), (snap) => {
         if (snap.exists()) {
           const data = snap.data() as UserDoc;
           // All counter/checkin/streak keys are derived in the student's timezone.
           setDefaultTimezone(data.timezone);
           setUserDoc(data);
+          settle();
         }
-        setLoading(false);
       });
+
+      // Create/backfill in parallel instead of awaiting before the listener
+      // attaches — the persistent cache resolves the snapshot fast for
+      // existing users, and ensureUserDoc finishes well before a fresh
+      // account's first snapshot would otherwise be empty.
+      ensureUserDoc(u)
+        .then(settle)
+        .catch((err) => {
+          console.error("Failed to ensure user doc", err);
+          settle();
+        });
     });
 
     return () => {

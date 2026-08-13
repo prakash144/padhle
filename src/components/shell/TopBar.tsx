@@ -1,25 +1,18 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  BarChart3,
   BookOpen,
-  CalendarDays,
   Check,
   ChevronDown,
-  CircleAlert,
-  ClipboardCheck,
   HelpCircle,
-  Inbox,
-  LayoutDashboard,
   LogOut,
+  Menu,
   Moon,
-  NotebookPen,
   RotateCcw,
   Search,
   Settings,
   Share2,
   Sun,
-  Trees,
   User,
   UserRoundCog,
 } from "lucide-react";
@@ -32,23 +25,9 @@ import { Dropdown } from "@/components/ui/dropdown";
 import { Avatar } from "@/components/Avatar";
 import { cn, friendlyFirstName } from "@/lib/utils";
 import { useFeatures } from "@/lib/useFeatures";
-import type { FeatureKey } from "@/lib/schema";
+import { useAdmin } from "@/lib/hooks";
+import { NAV_GROUPS, navItemHidden } from "./SideNav";
 import { daysBetween } from "@/lib/dates";
-
-const MOBILE_LINKS: { to: string; label: string; icon: typeof Sun; requires?: readonly FeatureKey[] }[] = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/backlog", label: "Backlog", icon: Inbox },
-  { to: "/sprints", label: "Sprints", icon: CalendarDays, requires: ["sprints"] },
-  { to: "/tests", label: "Tests & PYQs", icon: ClipboardCheck, requires: ["mocks", "pyqs"] },
-  { to: "/notes", label: "Notes", icon: NotebookPen, requires: ["notes"] },
-  { to: "/forest", label: "Study Forest", icon: Trees, requires: ["forest"] },
-  { to: "/errors", label: "Mistake Log", icon: CircleAlert, requires: ["errorBook"] },
-  { to: "/analytics", label: "Analytics", icon: BarChart3 },
-];
-
-function isVisible(item: { requires?: readonly FeatureKey[] }, features: Record<FeatureKey, boolean>) {
-  return !item.requires || item.requires.some((key) => features[key]);
-}
 
 export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   const { user, userDoc } = useAuth();
@@ -56,7 +35,15 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
   const toast = useToast();
   const { theme, toggleTheme } = useTheme();
   const features = useFeatures();
+  const isAdmin = useAdmin();
   const daysLeft = activeExam ? Math.max(0, daysBetween(new Date(), activeExam.examDate.toDate())) : null;
+
+  const mobileMenuGroups = (isAdmin ? NAV_GROUPS : NAV_GROUPS.filter((g) => g.label !== "Admin"))
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => !navItemHidden(item, features)),
+    }))
+    .filter((group) => group.items.length > 0);
 
   // Only show the academic contexts the student actually picked in onboarding
   // (their examGoals). Fall back to the full catalog only when no goals exist
@@ -157,6 +144,29 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
         <button onClick={onOpenPalette} aria-label="Search" className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary md:hidden">
           <Search size={16} />
         </button>
+        <Dropdown align="end" panelClassName="w-64 max-h-[calc(100dvh-5rem)] overflow-y-auto" trigger={({ open, toggle }) => (
+          <button onClick={toggle} aria-expanded={open} aria-label="Open menu" className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary md:hidden">
+            <Menu size={16} />
+          </button>
+        )}>
+          {(close) => (
+            <>
+              {mobileMenuGroups.map((group) => (
+                <div key={group.label} className="py-1">
+                  <p className="px-3 pb-1 pt-0.5 text-[10px] font-semibold uppercase tracking-widest text-text-muted">{group.label}</p>
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link key={item.to} to={item.to} onClick={close} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-surface-2 hover:text-text-primary">
+                        <Icon size={16} /> {item.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              ))}
+            </>
+          )}
+        </Dropdown>
         <button onClick={toggleTheme} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"} className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary transition-colors hover:border-border-strong hover:text-text-primary">
           {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
         </button>
@@ -184,11 +194,6 @@ export function TopBar({ onOpenPalette }: { onOpenPalette: () => void }) {
               <ProfileLink to="/help" icon={HelpCircle} label="How to use" close={close} />
               <ProfileLink to="/profile" section="settings" icon={RotateCcw} label="Reset & re-onboard" close={close} />
               <div className="my-1 h-px bg-border" />
-              {MOBILE_LINKS.filter((item) => isVisible(item, features)).map(({ to, label, icon: Icon }) => (
-                <Link key={to} to={to} onClick={close} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-surface-2 hover:text-text-primary md:hidden">
-                  <Icon size={16} /> {label}
-                </Link>
-              ))}
               <button onClick={() => signOutUser()} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-text-secondary hover:bg-surface-2 hover:text-text-primary">
                 <LogOut size={16} /> Sign out
               </button>

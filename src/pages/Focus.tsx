@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Pause, Play, Square, Check } from "lucide-react";
+import { ArrowRight, Check, Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import { recordDrillAccuracy } from "@/lib/drills";
 import { ForestTree } from "@/components/ForestTree";
 import { sessionVariety } from "@/lib/forest";
 import { ACTIVITY_OPTIONS, FOCUS_PRESETS, POMODORO_PRESETS, formatClock } from "@/lib/pomodoro";
+import { playTone, primeAudio, isSoundMuted, setSoundMuted } from "@/lib/sounds";
 import { useToast } from "@/lib/useToast";
 import { cn } from "@/lib/utils";
 import { dayKey } from "@/lib/dates";
@@ -116,6 +117,25 @@ export function Focus() {
   const [questionsDone, setQuestionsDone] = useState<number | "">(recovered?.questionsDone ?? paramTarget ?? "");
   const [correctCount, setCorrectCount] = useState<number | "">("");
   const [saving, setSaving] = useState(false);
+  const [muted, setMuted] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem("padhle:sound-muted") === "1" || isSoundMuted();
+    } catch {
+      return isSoundMuted();
+    }
+  });
+  const toggleSound = () => {
+    setMuted((m) => {
+      const next = !m;
+      setSoundMuted(next);
+      try {
+        window.localStorage.setItem("padhle:sound-muted", next ? "1" : "0");
+      } catch {
+        // mute won't persist across reloads — harmless.
+      }
+      return next;
+    });
+  };
   const toast = useToast();
 
   const subject = subjects.find((s) => s.id === subjectId);
@@ -133,6 +153,7 @@ export function Focus() {
     focusMinutesTotal * 60,
     step === "focus" && running,
     () => {
+      playTone(breakMinutesTotal > 0 ? "focusComplete" : "sessionComplete");
       setStep(breakMinutesTotal > 0 ? "break" : "complete");
       setRunning(true);
     },
@@ -143,6 +164,7 @@ export function Focus() {
     breakMinutesTotal * 60,
     step === "break" && running,
     () => {
+      playTone(breakMinutesTotal <= 5 ? "shortBreakEnd" : "longBreakEnd");
       setStep("complete");
       writeActiveFocus(null);
     },
@@ -198,9 +220,15 @@ export function Focus() {
     questionsDone,
   ]);
 
+  useEffect(() => {
+    if (quickStart) primeAudio();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!user) return null;
 
   const startFocus = () => {
+    primeAudio();
     setClientSessionId((current) => current || makeSessionId());
     setStartedAt(new Date());
     setRunning(true);
@@ -450,6 +478,13 @@ export function Focus() {
               >
                 <Square size={20} />
               </button>
+              <button
+                onClick={toggleSound}
+                aria-label={muted ? "Unmute completion sound" : "Mute completion sound"}
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white transition-colors hover:bg-white/10"
+              >
+                {muted ? <VolumeX size={22} /> : <Volume2 size={22} />}
+              </button>
             </div>
           </QuietOverlay>
         )}
@@ -467,12 +502,21 @@ export function Focus() {
                 {formatClock(breakTimer.remaining)}
               </span>
             </ProgressRing>
-            <button
-              onClick={skipBreak}
-              className="mt-8 rounded-full border border-white/10 bg-white/[0.06] px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
-            >
-              Skip break
-            </button>
+            <div className="mt-8 flex items-center gap-4">
+              <button
+                onClick={skipBreak}
+                className="rounded-full border border-white/10 bg-white/[0.06] px-5 py-2 text-sm text-white transition-colors hover:bg-white/10"
+              >
+                Skip break
+              </button>
+              <button
+                onClick={toggleSound}
+                aria-label={muted ? "Unmute completion sound" : "Mute completion sound"}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white transition-colors hover:bg-white/10"
+              >
+                {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              </button>
+            </div>
           </QuietOverlay>
         )}
 

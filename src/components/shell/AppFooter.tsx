@@ -13,7 +13,7 @@ const SOCIAL_LINKS = [
 export function AppFooter() {
   return (
     <footer className="mt-auto w-full border-t border-border bg-surface text-text-primary">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-6 md:flex-row">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 pb-24 pt-6 md:flex-row md:pb-6">
         <div className="flex flex-col items-center gap-3 md:items-start">
           <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-text-muted md:justify-start">
             <span role="img" aria-label="Padhle">🌳</span>

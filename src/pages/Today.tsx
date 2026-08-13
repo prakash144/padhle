@@ -44,11 +44,9 @@ export function Today() {
   const features = useFeatures();
   const { selected, exams, activeExam } = useAcademicContext();
   const [checkInOpen, setCheckInOpen] = useState(false);
-  const [quoteDismissed, setQuoteDismissed] = useState(false);
   const [reflection, setReflectionText] = useState("");
   const [mood, setMood] = useState<number | undefined>(undefined);
   const [savingReflection, setSavingReflection] = useState(false);
-  const hasPromptedCheckIn = useRef(false);
   const hasInjectedRevisions = useRef(false);
   const toast = useToast();
 
@@ -80,14 +78,6 @@ export function Today() {
     hasInjectedRevisions.current = true;
     injectDueRevisions(user.uid).catch((err) => console.error("Failed to inject revisions", err));
   }, [user]);
-
-  useEffect(() => {
-    if (hasPromptedCheckIn.current || checkin === undefined || !quoteDismissed) return;
-    hasPromptedCheckIn.current = true;
-    if (checkin === null || checkin.top3.length === 0) {
-      setCheckInOpen(true);
-    }
-  }, [checkin, quoteDismissed]);
 
   useEffect(() => {
     if (checkin === undefined) return;
@@ -279,6 +269,9 @@ export function Today() {
                 key={task.id}
                 task={task}
                 onToggle={(done) => {
+                  if (done && (checkin === null || checkin?.top3.length === 0)) {
+                    setCheckInOpen(true);
+                  }
                   setTaskDone(user.uid, task, done).catch((err) => {
                     console.error(err);
                     toast.error("Couldn't save that change. Try again.");
@@ -374,7 +367,7 @@ export function Today() {
 
       {features.sprints && activeSprint && <SprintCard sprint={activeSprint} compact />}
 
-      <QuoteDialog onDismiss={() => setQuoteDismissed(true)} />
+      <QuoteDialog />
 
       <CheckInSheet
         open={checkInOpen}

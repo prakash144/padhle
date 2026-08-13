@@ -4,7 +4,6 @@ import {
   getDocs,
   limit,
   query,
-  serverTimestamp,
   where,
   writeBatch,
 } from "firebase/firestore";
@@ -13,10 +12,12 @@ import { SYLLABUS_BY_EXAM } from "@/data/syllabus";
 import type { ExamType } from "@/lib/schema";
 
 /**
- * Seeds subjects + chapters for an exam from the bundled static dataset.
- * Idempotent: a no-op if this exam's subjects already exist, so it's safe to
- * call again (e.g. a student re-running onboarding, or adding a second exam
- * later) without duplicating the syllabus.
+ * Seeds the subjects for an exam from the bundled static dataset. Chapters /
+ * topics are intentionally NOT auto-created — students pick their own chapters
+ * from the Syllabus page so the data matches their actual course. Idempotent:
+ * a no-op if this exam's subjects already exist, so it's safe to call again
+ * (e.g. a student re-running onboarding, or adding a second exam later)
+ * without duplicating the syllabus.
  */
 export async function seedSyllabusForExam(uid: string, examType: ExamType): Promise<void> {
   const subjectsRef = collection(db, "users", uid, "subjects");
@@ -33,31 +34,11 @@ export async function seedSyllabusForExam(uid: string, examType: ExamType): Prom
       examType,
       color: subject.color,
       order: subjectOrder,
-      chapterCount: subject.chapters.length,
+      chapterCount: 0,
       masteredCount: 0,
       accuracyNum: 0,
       accuracyDen: 0,
       focusMinutes: 0,
-    });
-
-    subject.chapters.forEach((chapter) => {
-      const chapterRef = doc(collection(db, "users", uid, "chapters"));
-      batch.set(chapterRef, {
-        subjectId: subjectRef.id,
-        subjectName: subject.name,
-        name: chapter.name,
-        examType,
-        masteryStage: "not_started",
-        stageEnteredAt: serverTimestamp(),
-        accuracyNum: 0,
-        accuracyDen: 0,
-        questionsAttempted: 0,
-        pyqsDone: 0,
-        focusMinutes: 0,
-        weightage: chapter.weightage,
-        revisionSchedule: [],
-        updatedAt: serverTimestamp(),
-      });
     });
   });
 

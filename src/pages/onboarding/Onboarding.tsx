@@ -19,6 +19,10 @@ const accentClass: Record<ExamOption["accent"], string> = {
   boards: "border-exam-boards data-[selected=true]:bg-exam-boards/10 data-[selected=true]:border-exam-boards",
 };
 
+const EXAM_INFO: Record<string, ExamOption> = Object.fromEntries(
+  EXAM_OPTIONS.map((o) => [o.key, o])
+);
+
 export function Onboarding() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -27,26 +31,22 @@ export function Onboarding() {
   const [dates, setDates] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
-  const selectedExams = useMemo(
-    () => EXAM_OPTIONS.filter((e) => selected.has(e.key)),
+const selectedExams = useMemo(
+    () => [...selected.values()].map((key) => EXAM_INFO[key]),
     [selected]
   );
 
-  // The school group is single-select (only one class range). Competitive
-  // exams stay multi-select so Boards + JEE/NEET can be prepped together.
-  const toggleExam = (key: string, group: ExamOption["group"]) => {
+  // Any combination is allowed: a class range and/or one or more competitive
+  // exams (e.g. Class 9–10 + JEE, only JEE, only Class 9–10, both boards and
+  // NEET). Every option toggles independently.
+  const toggleExam = (key: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(key)) {
         next.delete(key);
-        return next;
+      } else {
+        next.add(key);
       }
-      if (group === "school") {
-        EXAM_OPTIONS.forEach((e) => {
-          if (e.group === "school") next.delete(e.key);
-        });
-      }
-      next.add(key);
       return next;
     });
   };
@@ -150,7 +150,7 @@ export function Onboarding() {
                 What are you preparing for?
               </h2>
               <p className="mb-6 text-center text-sm text-text-secondary">
-                Pick one or more — you can prep for Boards and JEE/NEET together.
+                Pick any combination — school with JEE/NEET, or just one exam.
               </p>
               {(["school", "competitive"] as const).map((group) => (
                 <div key={group} className="mb-5 last:mb-0">
@@ -164,7 +164,7 @@ export function Onboarding() {
                         <button
                           key={`${group}-${exam.key}`}
                           data-selected={isSelected}
-                          onClick={() => toggleExam(exam.key, group)}
+                          onClick={() => toggleExam(exam.key)}
                           aria-pressed={isSelected}
                           className={cn(
                             "relative rounded-xl border-2 bg-surface p-4 text-left shadow-e1 transition-all duration-standard",

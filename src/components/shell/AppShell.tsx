@@ -34,6 +34,30 @@ export function AppShell() {
     }
   }, [sidebarCollapsed]);
 
+  // Prefetch the most-visited route chunks once the browser is idle so
+  // navigating to Planner/Syllabus/Reports/etc. feels instant instead of
+  // showing a Suspense spinner while the chunk downloads.
+  useEffect(() => {
+    const prefetch = () => {
+      const loaders = [
+        import("@/pages/Planner"),
+        import("@/pages/Syllabus"),
+        import("@/pages/Focus"),
+        import("@/pages/Dashboard"),
+        import("@/pages/Reports"),
+        import("@/pages/Backlog"),
+        import("@/pages/Profile"),
+      ];
+      loaders.forEach((p) => p.catch(() => undefined));
+    };
+    const id = (window as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback
+      ? (window as { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(prefetch)
+      : window.setTimeout(prefetch, 1500);
+    return () => {
+      if (typeof id === "number") window.clearTimeout(id);
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-bg">
       <SideNav collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed((c) => !c)} />

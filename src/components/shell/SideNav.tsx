@@ -23,7 +23,7 @@ import { useAdmin } from "@/lib/hooks";
 import { useFeatures } from "@/lib/useFeatures";
 import type { FeatureKey } from "@/lib/schema";
 
-const groups = [
+export const NAV_GROUPS = [
   {
     label: "Learn",
     items: [
@@ -64,7 +64,7 @@ const groups = [
   },
 ] as const;
 
-function itemHidden(
+export function navItemHidden(
   item: { label: string; requires?: readonly FeatureKey[] },
   features: Record<FeatureKey, boolean>
 ) {
@@ -76,10 +76,10 @@ function itemHidden(
 export function SideNav({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
   const isAdmin = useAdmin();
   const features = useFeatures();
-  const visibleGroups = (isAdmin ? groups : groups.filter((g) => g.label !== "Admin"))
+  const visibleGroups = (isAdmin ? NAV_GROUPS : NAV_GROUPS.filter((g) => g.label !== "Admin"))
     .map((group) => ({
       ...group,
-      items: group.items.filter((item) => !itemHidden(item, features)),
+      items: group.items.filter((item) => !navItemHidden(item, features)),
     }))
     .filter((group) => group.items.length > 0);
 
